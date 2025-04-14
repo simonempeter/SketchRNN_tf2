@@ -3,6 +3,12 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras as K
 
+from tensorflow.keras.layers import Lambda
+
+def tile_z_func(inputs):
+    z, decoder_in = inputs
+    # Here, tf.shape(decoder_in)[1] is now safely used inside a Lambda layer.
+    return tf.tile(tf.expand_dims(z, 1), [1, tf.shape(decoder_in)[1], 1])
 
 class SketchRNN(object):
     def __init__(self, hps):
@@ -79,8 +85,9 @@ class SketchRNN(object):
             return_state=True,
         )
 
-        tile_z = tf.tile(tf.expand_dims(z_input, 1), [1, tf.shape(decoder_input)[1], 1])
+        tile_z = Lambda(tile_z_func)([z_input, decoder_input])
         decoder_full_input = tf.concat([decoder_input, tile_z], -1)
+
 
         decoder_output, cell_h, cell_c = decoder_lstm(
             decoder_full_input, initial_state=[initial_h_input, initial_c_input]
