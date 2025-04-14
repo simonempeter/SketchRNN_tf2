@@ -66,7 +66,7 @@ class SketchRNN(object):
             name="dec_initial_state",
             kernel_initializer=K.initializers.RandomNormal(mean=0.0, stddev=0.001),
         )(z_input)
-        states = tf.split(initial_state, 2, 1)
+        states = Lambda(lambda x: tf.split(x, 2, axis=1))(initial_state)
 
         return K.Model(inputs=z_input, outputs=states, name="initial_state")
 
