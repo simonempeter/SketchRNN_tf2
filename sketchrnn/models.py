@@ -326,8 +326,8 @@ def calculate_md_loss(y_true, y_pred):
     pen_loss = K.losses.categorical_crossentropy(pen_data, o_pen)
     pen_loss = K.backend.expand_dims(pen_loss)
 
-    if not K.backend.learning_phase():
-        pen_loss *= fs
+    # if not K.backend.learning_phase():
+    #     pen_loss *= fs
 
     result = gmm_loss + pen_loss
 
