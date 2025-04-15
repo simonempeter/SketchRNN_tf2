@@ -86,7 +86,7 @@ class SketchRNN(object):
         )
 
         tile_z = Lambda(tile_z_func)([z_input, decoder_input])
-        decoder_full_input = tf.concat([decoder_input, tile_z], -1)
+        decoder_full_input = K.layers.Concatenate(axis=-1)([decoder_input, tile_z])
 
 
         decoder_output, cell_h, cell_c = decoder_lstm(
