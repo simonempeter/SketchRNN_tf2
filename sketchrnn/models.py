@@ -161,7 +161,7 @@ class SketchRNN(object):
             strokes[i] = [next_x1, next_x2, 0, 0, 0]
             strokes[i, idx_eos + 2] = 1
 
-            prev_x = tf.reshape(tf.convert_to_tensor(stroke, dtype=tf.float32), (1, 1, 5))
+            prev_x = tf.reshape(tf.convert_to_tensor(strokes[i], dtype=tf.float32), (1, 1, 5))
 
         return strokes
 
