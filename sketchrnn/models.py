@@ -127,16 +127,18 @@ class SketchRNN(object):
     def sample(self, temperature=1.0, greedy=False, z=None):
         seq_len = self.hps["max_seq_len"]
         if z is None:
-            z = np.random.randn(1, self.hps["z_size"]).astype("float32")
+            z = tf.random.normal((1, self.hps["z_size"]), dtype=tf.float32)
+        else:
+            z = tf.convert_to_tensor(z, dtype=tf.float32)
 
-        prev_x = np.array([0, 0, 1, 0, 0], dtype=np.float32)
+        prev_x = tf.constant([0, 0, 1, 0, 0], dtype=tf.float32)
         cell_h, cell_c = self.models["initial_state"](z)
 
         strokes = np.zeros((seq_len, 5), dtype=np.float32)
 
         for i in range(seq_len):
             outouts, cell_h, cell_c = self.models["decoder"](
-                [prev_x.reshape((1, 1, 5)), z, cell_h, cell_c]
+            [tf.reshape(prev_x, (1, 1, 5)), z, cell_h, cell_c]
             )
 
             o_pi, o_mu1, o_mu2, o_sigma1, o_sigma2, o_corr, o_pen = get_mixture_coef(
@@ -159,7 +161,7 @@ class SketchRNN(object):
             strokes[i] = [next_x1, next_x2, 0, 0, 0]
             strokes[i, idx_eos + 2] = 1
 
-            prev_x = strokes[i]
+            prev_x = tf.reshape(tf.convert_to_tensor(stroke, dtype=tf.float32), (1, 1, 5))
 
         return strokes
 
