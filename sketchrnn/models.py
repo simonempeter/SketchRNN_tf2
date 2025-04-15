@@ -202,7 +202,7 @@ class SketchRNN(object):
                 lr = (hps["learning_rate"] - hps["min_learning_rate"]) * hps[
                     "decay_rate"
                 ] ** step + hps["min_learning_rate"]
-                K.backend.set_value(optimizer.lr, K.backend.get_value(lr))
+                K.backend.set_value(optimizer.learning_rate, K.backend.get_value(lr))
 
                 ## update kl weight
                 klw = (
