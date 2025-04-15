@@ -26,7 +26,7 @@ def random_scale(data, eps):
 def augment(data, prob):
     res = data.copy()
     n = res.shape[0]
-    mask = np.ones([n], dtype=np.bool)
+    mask = np.ones([n], dtype=bool)
     rand = np.random.uniform(size=[n]) < prob
     count, last = 0, 0
     for i, d in enumerate(res):
