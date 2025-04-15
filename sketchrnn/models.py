@@ -194,7 +194,7 @@ class SketchRNN(object):
         for epoch in range(initial_epoch + 1, hps["epochs"] + 1):
             start = time.time()
 
-            K.backend.set_learning_phase(1)
+            # K.backend.set_learning_phase(1)
             for batch, (inputs, target) in enumerate(train_dataset, 1):
                 step += 1
 
@@ -234,7 +234,7 @@ class SketchRNN(object):
                     )
                     start = time.time()
 
-            K.backend.set_learning_phase(0)
+            # K.backend.set_learning_phase(0)
             for inputs, target in val_dataset:
                 outputs, mu, sigma = model(inputs)
                 md_loss = K.backend.mean(calculate_md_loss(target, outputs))
